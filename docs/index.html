@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>treehash — una huella estable para tu directorio</title>
+    <meta
+      name="description"
+      content="CLI en Go que calcula un SHA-256 determinista de un árbol de directorios para cache keys y manifiestos de despliegue."
+    />
+    <link rel="canonical" href="https://melinoeluna4.github.io/treehash/" />
+    <meta property="og:title" content="treehash — Go CLI para hashes de árbol" />
+    <meta property="og:description" content="El mismo árbol produce el mismo hash. Ideal para cache keys de CI." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://melinoeluna4.github.io/treehash/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#f4efe5" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Saltar al contenido</a>
+
+    <header class="masthead">
+      <p class="masthead__issue">The Tree Archive · Vol. 04 · Go CLI</p>
+      <div class="masthead__row">
+        <a class="brand" href="./">treehash</a>
+        <nav aria-label="Enlaces del proyecto">
+          <a href="https://github.com/melinoeluna4/treehash">GitHub <span aria-hidden="true">↗</span></a>
+          <a href="https://melinoeluna4.github.io/proyectos/treehash/">Portfolio</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="paper">
+      <article>
+        <p class="kicker">A deterministic fingerprint</p>
+        <h1>treehash</h1>
+        <p class="standfirst">
+          Un árbol de archivos no es una carpeta: es una huella. <strong>treehash</strong> la
+          convierte en un SHA-256 estable para cache keys, manifiestos y comprobaciones de “¿cambió
+          algo?”.
+        </p>
+
+        <div class="hero-row">
+          <div class="stamp">
+            <span>SHA-256</span>
+            <strong>9c1d8f0e4b4f7c3b</strong>
+            <span>deterministic</span>
+          </div>
+          <div class="hero-actions">
+            <button
+              class="button"
+              type="button"
+              data-copy="go install github.com/melinoeluna4/treehash@latest"
+            >
+              Copiar instalación
+            </button>
+            <a class="text-link" href="https://github.com/melinoeluna4/treehash">Leer el repositorio <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
+        <section class="columns" aria-labelledby="what-title">
+          <div>
+            <h2 id="what-title">Qué es</h2>
+            <p>
+              Una CLI pequeña que recorre un directorio, ordena sus archivos regulares y combina sus
+              hashes con las rutas relativas. El resultado es una huella que no depende del orden
+              del sistema de archivos.
+            </p>
+            <p>
+              Sin dependencias externas. Un binario de Go que puedes instalar con
+              <code>go install</code> y ejecutar en cualquier runner.
+            </p>
+          </div>
+          <div>
+            <h2>Por qué existe</h2>
+            <p>
+              Una marca de tiempo no es una cache key. Un commit no siempre basta cuando el build
+              depende de archivos generados. <strong>treehash</strong> responde a la pregunta
+              aburrida y necesaria: ¿este árbol es el mismo que el de la última vez?
+            </p>
+          </div>
+        </section>
+
+        <section class="diagram" aria-labelledby="diagram-title">
+          <div>
+            <p class="kicker">El manifiesto</p>
+            <h2 id="diagram-title">Archivos → hashes → un solo número</h2>
+            <p>El orden de recorrido no importa. El contenido y la ruta sí.</p>
+          </div>
+          <pre class="tree"><code>src/
+├── main.go          6f2a…
+├── run.go           a91c…
+└── run_test.go      44be…
+README.md            0d7f…
+
+manifest = sort(path + hash)
+treehash = sha256(manifest)</code></pre>
+        </section>
+
+        <section class="usage" aria-labelledby="usage-title">
+          <div>
+            <p class="kicker">Uso</p>
+            <h2 id="usage-title">Una huella en la terminal</h2>
+            <p>Por defecto hashea el directorio actual y omite <code>.git</code>, <code>node_modules</code> y <code>dist</code>.</p>
+          </div>
+          <div class="code-card">
+            <pre><code>treehash
+9c1d8f0e…  .  (42 files)</code></pre>
+            <button
+              class="button button--small"
+              type="button"
+              data-copy="treehash"
+            >
+              Copiar
+            </button>
+          </div>
+        </section>
+
+        <section class="notes" aria-labelledby="notes-title">
+          <p class="kicker">Notas al margen</p>
+          <h2 id="notes-title">Tres decisiones</h2>
+          <ol>
+            <li>La ruta relativa entra en el manifiesto: renombrar cambia el hash.</li>
+            <li>Solo se hashean archivos regulares; symlinks y dispositivos se omiten.</li>
+            <li>Se ordena antes de combinar para que el walker no altere el resultado.</li>
+          </ol>
+        </section>
+
+        <section class="next" aria-labelledby="next-title">
+          <p class="kicker">Sigue explorando</p>
+          <h2 id="next-title">Más herramientas en Go</h2>
+          <div class="next-links">
+            <a href="https://melinoeluna4.github.io/envcheck/">envcheck <span>→</span></a>
+            <a href="https://melinoeluna4.github.io/portwait/">portwait <span>→</span></a>
+            <a href="https://melinoeluna4.github.io/httpcheck/">httpcheck <span>→</span></a>
+            <a href="https://melinoeluna4.github.io/mdtoc/">mdtoc <span>→</span></a>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="colophon">
+      <p>treehash · una herramienta de <a href="https://melinoeluna4.github.io/">Melinoe Luna</a></p>
+      <p><a href="https://github.com/melinoeluna4/treehash">README</a> · <a href="https://melinoeluna4.github.io/proyectos/treehash/">Ficha</a></p>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
